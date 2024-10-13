@@ -143,3 +143,9 @@ print("Select a score bar:")
 selected_score_bar = print_choices(score_bars)
 if selected_score_bar:
     print(f"Selected score bar: {selected_score_bar}\n")
+    
+
+# Add selected subject and year to the student
+if selected_student and selected_subject and selected_year:
+    selected_student.add_subject(selected_subject, selected_year)
+    print(f"Added {selected_subject.name} to {selected_student.name} for the year {selected_year.year}.")
