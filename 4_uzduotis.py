@@ -73,7 +73,7 @@ class Student(Person):
 
 # Function to print choices and select from them
 
-def print_choices(choices):
+def print_choices(choices): 
     """
     Print the available choices and let the user select them
     """
@@ -85,4 +85,38 @@ def print_choices(choices):
     else:
         print("Invalid choice. Try again!")
         return None
+
+
+# Create several subjects
+
+subjects = [
+    Subject("Matematika", 3),
+    Subject("Python programavimas", 4),
+    Subject("AI veido atpazinimas", 3)
+]
+
+# Create several years
+years = [
+    Year(2023),
+    Year(2024),
+    Year(2025)
+]
+
+# Create a score bar
+score_bars = [
+    ScoreBar({
+        (9, 10): "Labai gerai",
+        (7, 8.9): "Gerai",
+        (5, 6.9): "Patenkinamai",
+        (3, 4.9): "Blogai",
+        (1, 2.9): "Labai blogai"
+    })
+]
+
+# Create several students
+students = [
+    Student("Robertas", 29),
+    Student("Domantas", 31),
+    Student("Rimante", 30)
+]
 
