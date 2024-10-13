@@ -69,40 +69,6 @@ class Student(Person):
     def __str__(self):
         return f"Student: {self.name}, Age: {self.age}"
 
-    def calculate_subject_average(self, subject_name):
-        """
-        Paskaiciuojam ir grazinam dalyko vidurki
-        """
-        if subject_name in self.subjects and self.subjects[subject_name]["marks"]:
-            total_marks = sum(self.subjects[subject_name]["marks"])
-            return total_marks / len(self.subjects[subject_name]["marks"])
-        return 0
-
-    def calculate_overall_average(self):
-        """
-        Paskaiciuojam ir grazinam bendra vidurki visu dalyku
-        """
-        total_marks = 0
-        total_subjects = 0
-        for subject_name, details in self.subjects.items():
-            if details["marks"]:
-                total_marks += sum(details["marks"]) / len(details["marks"])
-                total_subjects += 1
-        return total_marks / total_subjects if total_subjects > 0 else 0
-
-    def display_info(self, score_bar=None):
-        """
-        Atvaizduojam studento informacija
-        """
-        print(f"Studentas: {self.name}, Amzius: {self.age}")
-        for subject_name, details in self.subjects.items():
-            average_marks = self.calculate_subject_average(subject_name)
-            grade = ""
-            if score_bar:
-                grade = score_bar.get_grade(average_marks)
-            print(f"Dalykas: {subject_name}, Pazymiai: {details["marks"]}, "
-                  f"Vidurkis: {average_marks:.2f}, Metai: {details["year"]}, Pazymis: {grade}")
-
 
 
 # Sukuriam dalyka
