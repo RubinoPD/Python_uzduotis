@@ -120,3 +120,26 @@ students = [
     Student("Rimante", 30)
 ]
 
+# Select a studen
+print("Select a student:")
+selected_student = print_choices(students)
+if selected_student:
+    print(f"Selected student: {selected_student}\n")
+    
+# Select a subject
+print("Select a subject:")
+selected_subject = print_choices(subjects)
+if selected_subject:
+    print(f"Selected subject: {selected_subject}\n")
+    
+# Select a year
+print("Select a year:")
+selected_year = print_choices(years)
+if selected_year:
+    print(f"Selected year: {selected_year}\n")
+    
+# Select a score bar
+print("Select a score bar:")
+selected_score_bar = print_choices(score_bars)
+if selected_score_bar:
+    print(f"Selected score bar: {selected_score_bar}\n")
