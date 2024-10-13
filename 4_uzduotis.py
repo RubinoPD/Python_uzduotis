@@ -71,35 +71,18 @@ class Student(Person):
 
 
 
-# Sukuriam dalyka
-subject1 = Subject("Matematika", 3)
-subject2 = Subject("Programavimas", 4)
+# Function to print choices and select from them
 
-# Sukuriam metus
-year1 = Year(2024)
-year2 = Year(2023)
+def print_choices(choices):
+    """
+    Print the available choices and let the user select them
+    """
+    for idx, choice in enumerate(choices, 1):
+        print(f"{idx}. {choice}")
+    selected = int(input("Select an option by number: ")) - 1
+    if 0 <= selected < len(choices):
+        return choices[selected]
+    else:
+        print("Invalid choice. Try again!")
+        return None
 
-# Sukuriam skale
-score_bar = ScoreBar({
-    (9, 10): "Labai gerai",
-    (7, 8.9): "Gerai",
-    (5, 6.9): "Patenkinamai",
-    (3, 4.9): "Blogai",
-    (1, 2.9): "Labai blogai"
-})
-
-# Sukuriam studenta
-student = Student("Robert Bobert", 29)
-student.add_subject(subject1, year1)
-student.add_subject(subject2, year2)
-
-# Pridedam pazymius
-student.add_marks("Matematika", [8, 9, 7])  
-student.add_marks("Programavimas", [10, 9.5])  
-
-# Atvaizduojam studento informacija
-student.display_info(score_bar)
-
-# Atvaizduojam bendra vidurki
-overall_average = student.calculate_overall_average()
-print(f"Bendras {student.name} vidurkis: {overall_average:.2f}")
