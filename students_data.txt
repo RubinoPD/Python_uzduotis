@@ -1,0 +1,9 @@
+Students:
+Roberto, 29
+Domantas, 31
+Rimante, 30
+
+Subjects:
+Matematika, 3
+Python programavimas, 4
+AI veido atpazinimas, 3
