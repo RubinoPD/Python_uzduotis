@@ -1,15 +1,15 @@
-Student: Roberto, Age: 29, Specialization: Information Technology
-  Subject: Matematika, Credits: 3, Marks: [4, 9, 2, 9, 2], Average Score: 5.2
-  Subject: Python programavimas, Credits: 4, Marks: [3, 5, 9, 3, 5], Average Score: 5.0
-  Subject: AI veido atpazinimas, Credits: 3, Marks: [9, 6, 5, 10, 7], Average Score: 7.4
+Student: Robertas, Age: 29, Specialization: Software Engineering, Overall Average Grade: 7.3
+  Subject: Matematika, Credits: 3, Marks: [4, 10, 7, 9, 10], Average Score: 8.0
+  Subject: Python programavimas, Credits: 4, Marks: [5, 9, 9, 5, 10], Average Score: 7.6
+  Subject: AI veido atpazinimas, Credits: 3, Marks: [1, 5, 6, 10, 10], Average Score: 6.4
 --------------------------------------------------
-Student: Domantas, Age: 31, Specialization: Information Technology
-  Subject: Matematika, Credits: 3, Marks: [5, 6, 2, 1, 4], Average Score: 3.6
-  Subject: Python programavimas, Credits: 4, Marks: [4, 10, 7, 8, 7], Average Score: 7.2
-  Subject: AI veido atpazinimas, Credits: 3, Marks: [6, 4, 4, 8, 2], Average Score: 4.8
+Student: Domantas, Age: 31, Specialization: Software Engineering, Overall Average Grade: 6.1
+  Subject: Matematika, Credits: 3, Marks: [1, 7, 6, 10, 1], Average Score: 5.0
+  Subject: Python programavimas, Credits: 4, Marks: [6, 9, 8, 10, 4], Average Score: 7.4
+  Subject: AI veido atpazinimas, Credits: 3, Marks: [9, 6, 6, 4, 4], Average Score: 5.8
 --------------------------------------------------
-Student: Rimante, Age: 30, Specialization: None
-  Subject: Matematika, Credits: 3, Marks: [7, 3, 10, 3, 2], Average Score: 5.0
-  Subject: Python programavimas, Credits: 4, Marks: [6, 3, 1, 9, 1], Average Score: 4.0
-  Subject: AI veido atpazinimas, Credits: 3, Marks: [9, 1, 3, 9, 4], Average Score: 5.2
+Student: Rimante, Age: 30, Specialization: Information Technology, Overall Average Grade: 5.9
+  Subject: Matematika, Credits: 3, Marks: [3, 10, 7, 6, 6], Average Score: 6.4
+  Subject: Python programavimas, Credits: 4, Marks: [1, 7, 1, 8, 10], Average Score: 5.4
+  Subject: AI veido atpazinimas, Credits: 3, Marks: [3, 9, 5, 4, 9], Average Score: 6.0
 --------------------------------------------------
