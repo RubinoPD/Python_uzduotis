@@ -1,3 +1,4 @@
+
 class Person:
     def __init__(self, name, age):
         self.name = name
@@ -166,3 +167,28 @@ if selected_score_bar:
 if selected_student and selected_subject and selected_year:
     selected_student.add_subject(selected_subject, selected_year)
     print(f"Added {selected_subject.name} to {selected_student.name} for the year {selected_year.year}.")
+
+# Input marks for each subject
+if selected_student and selected_subject:
+    marks = []
+    print(f"Enter marks for {selected_subject.name} (type 'done' to finish):")
+    while True:
+        mark = input("Enter mark:")
+        if mark.lower() == 'done':
+            break
+        try:
+            marks.append(float(mark))
+        except ValueError:
+            print("Invalid input. Please enter a number or 'done' to finish.")
+
+    # Add marks to the subject for the selected student
+    selected_student.add_marks(selected_subject.name, marks)
+
+    # Calculate and display the average and grade
+    avg_score = round(selected_student.calculate_average(selected_subject.name), 1)
+    grade = selected_score_bar.get_grade(avg_score) if avg_score is not None else "N/A"
+    print(f"Average Score for {selected_subject.name}: {avg_score}")
+    print(f"Grade: {grade}")
+
+    print("\nStudent's updated info:")
+    print(selected_student)
