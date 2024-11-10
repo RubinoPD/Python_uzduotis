@@ -1,15 +1,15 @@
-Student: Robertas, Age: 29, Specialization: Software Engineering, Overall Average Grade: 7.3
-  Subject: Matematika, Credits: 3, Marks: [4, 10, 7, 9, 10], Average Score: 8.0
-  Subject: Python programavimas, Credits: 4, Marks: [5, 9, 9, 5, 10], Average Score: 7.6
-  Subject: AI veido atpazinimas, Credits: 3, Marks: [1, 5, 6, 10, 10], Average Score: 6.4
+Name: Rimante, Age: 30 , Specialization: None, Overall Average Grade: 4.60
+  Subject: Matematika, Marks: [5, 4, 4, 9, 4], Average Score: 5.2
+  Subject: Python programavimas, Marks: [9, 8, 9, 2, 1], Average Score: 5.8
+  Subject: AI veido atpazinimas, Marks: [3, 3, 4, 1, 1], Average Score: 2.4
 --------------------------------------------------
-Student: Domantas, Age: 31, Specialization: Software Engineering, Overall Average Grade: 6.1
-  Subject: Matematika, Credits: 3, Marks: [1, 7, 6, 10, 1], Average Score: 5.0
-  Subject: Python programavimas, Credits: 4, Marks: [6, 9, 8, 10, 4], Average Score: 7.4
-  Subject: AI veido atpazinimas, Credits: 3, Marks: [9, 6, 6, 4, 4], Average Score: 5.8
+Name: Domantas, Age: 31 , Specialization: None, Overall Average Grade: 4.80
+  Subject: Matematika, Marks: [9, 5, 5, 1, 1], Average Score: 4.2
+  Subject: Python programavimas, Marks: [6, 8, 4, 5, 1], Average Score: 4.8
+  Subject: AI veido atpazinimas, Marks: [7, 4, 5, 10, 1], Average Score: 5.4
 --------------------------------------------------
-Student: Rimante, Age: 30, Specialization: Information Technology, Overall Average Grade: 5.9
-  Subject: Matematika, Credits: 3, Marks: [3, 10, 7, 6, 6], Average Score: 6.4
-  Subject: Python programavimas, Credits: 4, Marks: [1, 7, 1, 8, 10], Average Score: 5.4
-  Subject: AI veido atpazinimas, Credits: 3, Marks: [3, 9, 5, 4, 9], Average Score: 6.0
+Name: Robertas, Age: 29 , Specialization: Information Technology, Overall Average Grade: 5.76
+  Subject: Matematika, Marks: [1, 4, 9, 6, 2], Average Score: 4.4
+  Subject: Python programavimas, Marks: [4, 10, 7, 5, 4], Average Score: 6.0
+  Subject: AI veido atpazinimas, Marks: [10, 2, 6, 8, 8], Average Score: 6.8
 --------------------------------------------------
