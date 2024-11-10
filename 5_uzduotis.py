@@ -70,8 +70,23 @@ class Student(Person):
         else:
             print(f"Dalykas {subject_name} nerastas!")
 
+    def calculate_average(self, subject_name):
+        """
+        Paskaiciuoti pazymiu vidurki
+        """
+        if subject_name in self.subjects:
+            marks = self.subjects[subject_name]["marks"]
+            if marks:
+                return sum(marks) / len(marks)
+        return None
+
     def __str__(self):
-        return f"Student: {self.name}, Age: {self.age}"
+        student_info = f"Student: {self.name}, Age: {self.age}"
+        subjects_info = ""
+        for subject, details in self.subjects.items():
+            avg_score = self.calculate_average(subject)
+            subjects_info += f"\n  Subject: {subject}, Credits: {details['credit']}, Average Score: {avg_score if avg_score is not None else 'N/A'}"
+        return student_info + subjects_info
 
 
 # Function to print choices and select from them
