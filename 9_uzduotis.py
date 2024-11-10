@@ -1,4 +1,5 @@
 import random
+import re
 
 # Base class for common person details (name, age)
 class Person:
@@ -113,14 +114,35 @@ def load_data_from_file(filename):
 
     return students, subjects
 
-# Function to save student results to file
-def save_results_to_file(filename, students):
-    students_sorted = sorted(students, key=lambda student: student.calculate_overall_average(), reverse=False)
+# Function to generate a report on what students are studying based on subject names
+def generate_study_report(students, pattern):
+    # Create a dictionary to store students grouped by subjects that match the regex pattern
+    subject_groups = {}
 
-    with open(filename, 'w') as file:
-        for student in students_sorted:
-            file.write(str(student) + "\n")
-            file.write("-" * 50 + "\n")
+    # Compile the regex pattern
+    regex = re.compile(pattern, re.IGNORECASE)  # Case-insensitive matching
+
+    # Loop through each student and their subjects
+    for student in students:
+        for subject, marks in student.subjects:
+            # Check if the subject name matches the regex pattern
+            if regex.search(subject.subject_name):
+                # If the subject is found, group the student under the matching subject
+                if subject.subject_name not in subject_groups:
+                    subject_groups[subject.subject_name] = []
+                subject_groups[subject.subject_name].append(student.name)
+
+    # Print the report
+    report = ""
+    for subject_name, student_list in subject_groups.items():
+        report += f"Subject: {subject_name}\n"
+        report += "  Students studying this subject:\n"
+        for student in student_list:
+            report += f"    {student}\n"
+        report += "\n"
+
+    return report
+
 
 # Main program
 
@@ -152,15 +174,14 @@ for student in students:
     average_grade = student.calculate_overall_average()
     student.assign_specialization(average_grade, specialization_criteria)
 
-
-# Save results to output file
-save_results_to_file("student_results.txt", students)
-
-# Print to console, including overall average grades
 for student in students:
     print(student)
     print("\n" + "-" * 50 + "\n")
 
-for employee in employees:
-    print(employee)
-    print("\n" + "-" * 50 + "\n")
+pattern = r"Matematika"
+
+# Generate a report on students studying subjects with "Data" in their name
+report = generate_study_report(students, pattern)
+
+print("Generated Report:")
+print(report)

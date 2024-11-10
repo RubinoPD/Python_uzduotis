@@ -56,7 +56,8 @@ class Student(Person):
                 break
 
     def __str__(self):
-        student_info = f"Student: {self.name}, Age: {self.age}, Specialization: {self.specialization}"
+        average_grade = self.calculate_overall_average()
+        student_info = f"Student: {self.name}, Age: {self.age}, Specialization: {self.specialization}, Overall Average Grade: {average_grade:.1f}"
         subjects_info = ""
         for subject, details in self.subjects.items():
             avg_score = sum(details["marks"]) / len(details["marks"]) if details["marks"] else "N/A"
@@ -97,8 +98,11 @@ def load_data_from_file(filename):
 
 # Function to save students' results to a file
 def save_results_to_file(filename, students):
+    # Sort students by average grade in descending order
+    students_sorted = sorted(students, key=lambda student: student.calculate_overall_average() or 0, reverse=False) # key=lambda student --> anonymous function
+
     with open(filename, 'w') as file:
-        for student in students:
+        for student in students_sorted:
             file.write(str(student) + "\n")
             file.write("-" * 50 + "\n")
 
@@ -117,9 +121,9 @@ specialization_criteria = [
 
 # Assign subjects and random marks to each student
 for student in students:
-    for subject, year in zip(subjects, years):
+    for subject in subjects:
         marks = [random.randint(1, 10) for _ in range(5)]
-        student.add_subject(subject, year, marks)
+        student.add_subject(subject, random.choice(years), marks)
 
     # Calculate and assign specialization based on the student's average grade
     average_grade = student.calculate_overall_average()

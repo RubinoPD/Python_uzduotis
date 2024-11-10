@@ -1,6 +1,6 @@
 import random
 
-
+# Base class for common person details (name, age)
 class Person:
     def __init__(self, name, age):
         self.name = name
@@ -9,14 +9,35 @@ class Person:
     def __str__(self):
         return f"Name: {self.name}, Age: {self.age}"
 
-
-class Subject:
-    def __init__(self, name, credit):
-        self.name = name
+# Base class for academic-related details (marks, credits)
+class Academic:
+    def __init__(self, subject_name, credit):
+        self.subject_name = subject_name
         self.credit = credit
+        self.marks = []
+
+    def add_marks(self, marks):
+        self.marks.extend(marks)
+
+    def calculate_average(self):
+        return sum(self.marks) / len(self.marks) if self.marks else 0
 
     def __str__(self):
-        return f"Subject: {self.name}, Credits: {self.credit}"
+        return f"Subject: {self.subject_name}, Credits: {self.credit}, Marks: {self.marks}, Average Score: {self.calculate_average():.2f}"
+
+# Employee class inherits Person
+class Employee(Person):
+    def __init__(self, name, age, position):
+        super().__init__(name, age)
+        self.position = position
+
+    def __str__(self):
+        return f"{super().__str__()}, Position: {self.position}"
+
+# Subject class inherits Academic
+class Subject(Academic):
+    def __init__(self, subject_name, credit):
+        super().__init__(subject_name, credit)
 
 
 class Year:
@@ -27,27 +48,28 @@ class Year:
         return f"Year: {self.year}"
 
 
-class Student(Person):
+# Student class inherits both Person and Academic
+class Student(Person, Academic):
     def __init__(self, name, age):
         super().__init__(name, age)
-        self.subjects = {}
-        self.specialization = None
+        self.subjects = []
 
-    def add_subject(self, subject, year, marks):
-        self.subjects[subject.name] = {
-            "credit": subject.credit,
-            "marks": marks,
-            "year": year.year
-        }
+    def add_subject(self, subject, marks):
+        subject.add_marks(marks)
+        self.subjects.append((subject, marks))
 
     def calculate_overall_average(self):
         total_marks = 0
-        total_count = 0
-        for subject, details in self.subjects.items():
-            marks = details["marks"]
-            total_marks += sum(marks)
-            total_count += len(marks)
-        return total_marks / total_count if total_count > 0 else None
+        total_credits = 0
+
+        # Loop through each subject and marks
+        for subject, marks in self.subjects:
+            subject_avg = sum(marks) / len(marks)  # Calculate average marks for the subject
+            total_marks += subject_avg * subject.credit  # Weighted average by credits
+            total_credits += subject.credit  # Sum of credits
+
+        # Return the overall average (weighted average)
+        return total_marks / total_credits if total_credits else 0
 
     def assign_specialization(self, average_grade, specialization_criteria):
         for threshold, specialization in specialization_criteria:
@@ -56,16 +78,12 @@ class Student(Person):
                 break
 
     def __str__(self):
-        average_grade = self.calculate_overall_average()
-        student_info = f"Student: {self.name}, Age: {self.age}, Specialization: {self.specialization}, Overall Average Grade: {average_grade:.1f}"
-        subjects_info = ""
-        for subject, details in self.subjects.items():
-            avg_score = sum(details["marks"]) / len(details["marks"]) if details["marks"] else "N/A"
-            subjects_info += f"\n  Subject: {subject}, Credits: {details['credit']}, Marks: {details['marks']}, Average Score: {avg_score}"
-        return student_info + subjects_info
+        avg_grade = self.calculate_overall_average()
+        specialization_info = f", Specialization: {getattr(self, 'specialization', 'None')}"
+        subjects_info = "".join([f"\n  Subject: {subject.subject_name}, Marks: {marks}, Average Score: {sum(marks) / len(marks):.1f}" for subject, marks in self.subjects])
+        return f"{super().__str__()} {specialization_info}, Overall Average Grade: {avg_grade:.2f}{subjects_info}"
 
-
-# Function to read student and subject data from a file
+# Function to load data from file
 def load_data_from_file(filename):
     students = []
     subjects = []
@@ -95,19 +113,24 @@ def load_data_from_file(filename):
 
     return students, subjects
 
-
-# Function to save students' results to a file
+# Function to save student results to file
 def save_results_to_file(filename, students):
-    # Sort students by average grade in descending order
-    students_sorted = sorted(students, key=lambda student: student.calculate_overall_average() or 0, reverse=False) # key=lambda student --> anonymous function
+    students_sorted = sorted(students, key=lambda student: student.calculate_overall_average(), reverse=False)
 
     with open(filename, 'w') as file:
         for student in students_sorted:
             file.write(str(student) + "\n")
             file.write("-" * 50 + "\n")
 
+# Main program
 
-# Load data from input file
+employees = [
+    Employee("Dalia", 55, "Docente"),
+    Employee("Stasia", 45, "Valytoja"),
+    Employee("Gabija", 35, "Direktore")
+]
+
+# Load data from file
 students, subjects = load_data_from_file("students_data.txt")
 
 # Define years and specialization criteria
@@ -122,17 +145,22 @@ specialization_criteria = [
 # Assign subjects and random marks to each student
 for student in students:
     for subject in subjects:
-        marks = [random.randint(1, 10) for _ in range(5)]
-        student.add_subject(subject, random.choice(years), marks)
+        marks = [random.randint(1, 10) for _ in range(5)]  # Random marks between 1 and 10 for each student
+        student.add_subject(subject, marks)
 
     # Calculate and assign specialization based on the student's average grade
     average_grade = student.calculate_overall_average()
     student.assign_specialization(average_grade, specialization_criteria)
 
+
 # Save results to output file
 save_results_to_file("student_results.txt", students)
 
-# Print to console
+# Print to console, including overall average grades
 for student in students:
     print(student)
+    print("\n" + "-" * 50 + "\n")
+
+for employee in employees:
+    print(employee)
     print("\n" + "-" * 50 + "\n")

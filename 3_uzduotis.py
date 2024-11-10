@@ -2,15 +2,24 @@ class Person:
     def __init__(self, name, age):
         self.name = name
         self.age = age
+        
+    def __str__(self):
+        return f"Name: {self.name}, Age: {self.age}"
 
 class Subject:
     def __init__(self, name, credit):
         self.name = name
         self.credit = credit
+        
+    def __str__(self):
+        return f"Subject: {self.name}, Credits: {self.credit}"
 
 class Year:
     def __init__(self, year):
         self.year = year
+        
+    def __str__(self):
+        return f"Year: {self.year}"
 
 class ScoreBar:
     def __init__(self, score_ranges):
@@ -19,6 +28,10 @@ class ScoreBar:
         Pvz: { (9, 10): "Labai gerai", (8, 7): "Gerai", (6, 5): "Patenkinamai", (4, 3): "Blogai", (2, 1): "Labai blogai" }
         """
         self.score_ranges = score_ranges
+        
+    def __str__(self):
+        ranges_str = ', '.join([f"{k[0]}-{k[1]}: {v}" for k, v in self.score_ranges.items()])
+        return f"Score Bar: {ranges_str}"
 
     def get_grade(self, score):
         """
@@ -52,72 +65,87 @@ class Student(Person):
             self.subjects[subject_name]["marks"].extend(new_marks)
         else:
             print(f"Dalykas {subject_name} nerastas!")
-
-    def calculate_subject_average(self, subject_name):
-        """
-        Paskaiciuojam ir grazinam dalyko vidurki
-        """
-        if subject_name in self.subjects and self.subjects[subject_name]["marks"]:
-            total_marks = sum(self.subjects[subject_name]["marks"])
-            return total_marks / len(self.subjects[subject_name]["marks"])
-        return 0
-
-    def calculate_overall_average(self):
-        """
-        Paskaiciuojam ir grazinam bendra vidurki visu dalyku
-        """
-        total_marks = 0
-        total_subjects = 0
-        for subject_name, details in self.subjects.items():
-            if details["marks"]:
-                total_marks += sum(details["marks"]) / len(details["marks"])
-                total_subjects += 1
-        return total_marks / total_subjects if total_subjects > 0 else 0
-
-    def display_info(self, score_bar=None):
-        """
-        Atvaizduojam studento informacija
-        """
-        print(f"Studentas: {self.name}, Amzius: {self.age}")
-        for subject_name, details in self.subjects.items():
-            average_marks = self.calculate_subject_average(subject_name)
-            grade = ""
-            if score_bar:
-                grade = score_bar.get_grade(average_marks)
-            print(f"Dalykas: {subject_name}, Pazymiai: {details["marks"]}, "
-                  f"Vidurkis: {average_marks:.2f}, Metai: {details["year"]}, Pazymis: {grade}")
+            
+    def __str__(self):
+        return f"Student: {self.name}, Age: {self.age}"
 
 
 
-# Sukuriam dalyka
-subject1 = Subject("Matematika", 3)
-subject2 = Subject("Programavimas", 4)
+# Function to print choices and select from them
 
-# Sukuriam metus
-year1 = Year(2024)
-year2 = Year(2023)
+def print_choices(choices): 
+    """
+    Print the available choices and let the user select them
+    """
+    for idx, choice in enumerate(choices, 1):
+        print(f"{idx}. {choice}")
+    selected = int(input("Select an option by number: ")) - 1
+    if 0 <= selected < len(choices):
+        return choices[selected]
+    else:
+        print("Invalid choice. Try again!")
+        return None
 
-# Sukuriam skale
-score_bar = ScoreBar({
-    (9, 10): "Labai gerai",
-    (7, 8.9): "Gerai",
-    (5, 6.9): "Patenkinamai",
-    (3, 4.9): "Blogai",
-    (1, 2.9): "Labai blogai"
-})
 
-# Sukuriam studenta
-student = Student("Robert Bobert", 29)
-student.add_subject(subject1, year1)
-student.add_subject(subject2, year2)
+# Create several subjects
 
-# Pridedam pazymius
-student.add_marks("Matematika", [8, 9, 7])  
-student.add_marks("Programavimas", [10, 9.5])  
+subjects = [
+    Subject("Matematika", 3),
+    Subject("Python programavimas", 4),
+    Subject("AI veido atpazinimas", 3)
+]
 
-# Atvaizduojam studento informacija
-student.display_info(score_bar)
+# Create several years
+years = [
+    Year(2023),
+    Year(2024),
+    Year(2025)
+]
 
-# Atvaizduojam bendra vidurki
-overall_average = student.calculate_overall_average()
-print(f"Bendras {student.name} vidurkis: {overall_average:.2f}")
+# Create a score bar
+score_bars = [
+    ScoreBar({
+        (9, 10): "Labai gerai",
+        (7, 8.9): "Gerai",
+        (5, 6.9): "Patenkinamai",
+        (3, 4.9): "Blogai",
+        (1, 2.9): "Labai blogai"
+    })
+]
+
+# Create several students
+students = [
+    Student("Robertas", 29),
+    Student("Domantas", 31),
+    Student("Rimante", 30)
+]
+
+# Select a studen
+print("Select a student:")
+selected_student = print_choices(students)
+if selected_student:
+    print(f"Selected student: {selected_student}\n")
+    
+# Select a subject
+print("Select a subject:")
+selected_subject = print_choices(subjects)
+if selected_subject:
+    print(f"Selected subject: {selected_subject}\n")
+    
+# Select a year
+print("Select a year:")
+selected_year = print_choices(years)
+if selected_year:
+    print(f"Selected year: {selected_year}\n")
+    
+# Select a score bar
+print("Select a score bar:")
+selected_score_bar = print_choices(score_bars)
+if selected_score_bar:
+    print(f"Selected score bar: {selected_score_bar}\n")
+    
+
+# Add selected subject and year to the student
+if selected_student and selected_subject and selected_year:
+    selected_student.add_subject(selected_subject, selected_year)
+    print(f"Added {selected_subject.name} to {selected_student.name} for the year {selected_year.year}.")

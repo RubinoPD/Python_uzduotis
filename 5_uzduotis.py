@@ -1,3 +1,5 @@
+import random
+
 
 class Person:
     def __init__(self, name, age):
@@ -29,7 +31,7 @@ class ScoreBar:
     def __init__(self, score_ranges):
         """
         Sukuriam balu kartele
-        Pvz: { (9, 10): "Labai gerai", (8, 7): "Gerai", (6, 5): "Patenkinamai", (4, 3): "Blogai", (2, 1): "Labai blogai" }
+        { (9, 10): "Labai gerai", (8, 7): "Gerai", (6, 5): "Patenkinamai", (4, 3): "Blogai", (2, 1): "Labai blogai" }
         """
         self.score_ranges = score_ranges
 
@@ -44,92 +46,67 @@ class ScoreBar:
         for score_range, grade in self.score_ranges.items():
             if score_range[0] <= score <= score_range[1]:
                 return grade
-        return "No grade"  # Grazina default value jeigu nerandama pazymio
+        return "No grade"
 
 
 class Student(Person):
     def __init__(self, name, age):
         super().__init__(name, age)
         self.subjects = {}  # Dictionary laikyti mokymosi dalykus, pazymius ir metus
+        self.specialization = None  # Specializacijos bus priskirtos atitinkamai nuo vidurkio
 
-    def add_subject(self, subject, year):
+    def add_subject(self, subject, year, marks):
         """
         Prideti dalyka ir akademinius metus studentui
         """
         self.subjects[subject.name] = {
             "credit": subject.credit,
-            "marks": [],
+            "marks": marks,
             "year": year.year
         }
 
-    def add_marks(self, subject_name, new_marks):
+    def calculate_overall_average(self):
         """
-        Prideti pazymius
+        Paskaiciuoti visu dalyku vidurki
         """
-        if subject_name in self.subjects:
-            self.subjects[subject_name]["marks"].extend(new_marks)
-        else:
-            print(f"Dalykas {subject_name} nerastas!")
+        total_marks = 0
+        total_count = 0
+        for subject, details in self.subjects.items():
+            marks = details["marks"]
+            total_marks += sum(marks)
+            total_count += len(marks)
+        return total_marks / total_count if total_count > 0 else None
 
-    def calculate_average(self, subject_name):
+    def assign_specialization(self, average_grade, specialization_criteria):
         """
-        Paskaiciuoti pazymiu vidurki
+        Priskiria specializacija priklausomai nuo vidurkio
         """
-        if subject_name in self.subjects:
-            marks = self.subjects[subject_name]["marks"]
-            if marks:
-                return sum(marks) / len(marks)
-        return None
+        for threshold, specialization in specialization_criteria:
+            if average_grade >= threshold:
+                self.specialization = specialization
+                break
 
     def __str__(self):
-        student_info = f"Student: {self.name}, Age: {self.age}"
+        student_info = f"Student: {self.name}, Age: {self.age}, Specialization: {self.specialization}"
         subjects_info = ""
         for subject, details in self.subjects.items():
-            avg_score = self.calculate_average(subject)
-            subjects_info += f"\n  Subject: {subject}, Credits: {details['credit']}, Average Score: {avg_score if avg_score is not None else 'N/A'}"
+            avg_score = sum(details["marks"]) / len(details["marks"]) if details["marks"] else "N/A"
+            subjects_info += f"\n  Subject: {subject}, Credits: {details['credit']}, Marks: {details['marks']}, Average Score: {avg_score}"
         return student_info + subjects_info
 
 
-# Function to print choices and select from them
-
-def print_choices(choices):
-    """
-    Print the available choices and let the user select them
-    """
-    for idx, choice in enumerate(choices, 1):
-        print(f"{idx}. {choice}")
-    selected = int(input("Select an option by number: ")) - 1
-    if 0 <= selected < len(choices):
-        return choices[selected]
-    else:
-        print("Invalid choice. Try again!")
-        return None
-
-
 # Create several subjects
-
 subjects = [
     Subject("Matematika", 3),
     Subject("Python programavimas", 4),
     Subject("AI veido atpazinimas", 3)
 ]
 
-# Create several years
+# Define years for each subject
 years = [
     Year(2023),
     Year(2024),
     Year(2025)
-]
-
-# Create a score bar
-score_bars = [
-    ScoreBar({
-        (9, 10): "Labai gerai",
-        (7, 8.9): "Gerai",
-        (5, 6.9): "Patenkinamai",
-        (3, 4.9): "Blogai",
-        (1, 2.9): "Labai blogai"
-    })
 ]
 
 # Create several students
@@ -139,56 +116,26 @@ students = [
     Student("Rimante", 30)
 ]
 
-# Select a student
-print("Select a student:")
-selected_student = print_choices(students)
-if selected_student:
-    print(f"Selected student: {selected_student}\n")
+# Define specialization criteria based on average grade thresholds
+specialization_criteria = [
+    (9.0, "Computer Science"),
+    (7.5, "Data Science"),
+    (6.0, "Software Engineering"),
+    (5.0, "Information Technology")
+]
 
-# Select a subject
-print("Select a subject:")
-selected_subject = print_choices(subjects)
-if selected_subject:
-    print(f"Selected subject: {selected_subject}\n")
+# Assign subjects and random marks to each student
+for student in students:
+    for subject, year in zip(subjects, years):
+        # Random marks between 1 and 10 for the subject
+        marks = [random.randint(1, 10) for _ in range(5)]
+        student.add_subject(subject, year, marks)
 
-# Select a year
-print("Select a year:")
-selected_year = print_choices(years)
-if selected_year:
-    print(f"Selected year: {selected_year}\n")
+    # Calculate and assign specialization based on the student's average grade
+    average_grade = round(student.calculate_overall_average(), 1)
+    student.assign_specialization(average_grade, specialization_criteria)
 
-# Select a score bar
-print("Select a score bar:")
-selected_score_bar = print_choices(score_bars)
-if selected_score_bar:
-    print(f"Selected score bar: {selected_score_bar}\n")
-
-# Add selected subject and year to the student
-if selected_student and selected_subject and selected_year:
-    selected_student.add_subject(selected_subject, selected_year)
-    print(f"Added {selected_subject.name} to {selected_student.name} for the year {selected_year.year}.")
-
-# Input marks for each subject
-if selected_student and selected_subject:
-    marks = []
-    print(f"Enter marks for {selected_subject.name} (type 'done' to finish):")
-    while True:
-        mark = input("Enter mark:")
-        if mark.lower() == 'done':
-            break
-        try:
-            marks.append(float(mark))
-        except ValueError:
-            print("Invalid input. Please enter a number or 'done' to finish.")
-
-    # Add marks to the subject for the selected student
-    selected_student.add_marks(selected_subject.name, marks)
-
-    # Calculate and display the average and grade
-    avg_score = round(selected_student.calculate_average(selected_subject.name), 1)
-    grade = selected_score_bar.get_grade(avg_score) if avg_score is not None else "N/A"
-    print(f"Average Score for {selected_subject.name}: {avg_score}")
-    print(f"Grade: {grade}")
-
-    print("\nStudent's updated info:")
-    print(selected_student)
+# Print each student's information including their specialization
+for student in students:
+    print(student)
+    print("\n" + "-" * 50 + "\n")

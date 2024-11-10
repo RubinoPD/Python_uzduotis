@@ -27,38 +27,13 @@ class Year:
         return f"Year: {self.year}"
 
 
-class ScoreBar:
-    def __init__(self, score_ranges):
-        """
-        Sukuriam balu kartele
-        { (9, 10): "Labai gerai", (8, 7): "Gerai", (6, 5): "Patenkinamai", (4, 3): "Blogai", (2, 1): "Labai blogai" }
-        """
-        self.score_ranges = score_ranges
-
-    def __str__(self):
-        ranges_str = ', '.join([f"{k[0]}-{k[1]}: {v}" for k, v in self.score_ranges.items()])
-        return f"Score Bar: {ranges_str}"
-
-    def get_grade(self, score):
-        """
-        Paimti pazymi atspindinti balu kartele
-        """
-        for score_range, grade in self.score_ranges.items():
-            if score_range[0] <= score <= score_range[1]:
-                return grade
-        return "No grade"
-
-
 class Student(Person):
     def __init__(self, name, age):
         super().__init__(name, age)
-        self.subjects = {}  # Dictionary laikyti mokymosi dalykus, pazymius ir metus
-        self.specialization = None  # Specializacijos bus priskirtos atitinkamai nuo vidurkio
+        self.subjects = {}
+        self.specialization = None
 
     def add_subject(self, subject, year, marks):
-        """
-        Prideti dalyka ir akademinius metus studentui
-        """
         self.subjects[subject.name] = {
             "credit": subject.credit,
             "marks": marks,
@@ -66,9 +41,6 @@ class Student(Person):
         }
 
     def calculate_overall_average(self):
-        """
-        Paskaiciuoti visu dalyku vidurki
-        """
         total_marks = 0
         total_count = 0
         for subject, details in self.subjects.items():
@@ -78,9 +50,6 @@ class Student(Person):
         return total_marks / total_count if total_count > 0 else None
 
     def assign_specialization(self, average_grade, specialization_criteria):
-        """
-        Priskiria specializacija priklausomai nuo vidurkio
-        """
         for threshold, specialization in specialization_criteria:
             if average_grade >= threshold:
                 self.specialization = specialization
@@ -95,28 +64,50 @@ class Student(Person):
         return student_info + subjects_info
 
 
-# Create several subjects
-subjects = [
-    Subject("Matematika", 3),
-    Subject("Python programavimas", 4),
-    Subject("AI veido atpazinimas", 3)
-]
+# Function to read student and subject data from a file
+def load_data_from_file(filename):
+    students = []
+    subjects = []
 
-# Define years for each subject
-years = [
-    Year(2023),
-    Year(2024),
-    Year(2025)
-]
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+        reading_students = False
+        reading_subjects = False
 
-# Create several students
-students = [
-    Student("Robertas", 29),
-    Student("Domantas", 31),
-    Student("Rimante", 30)
-]
+        for line in lines:
+            line = line.strip()
+            if line == "Students:":
+                reading_students = True
+                reading_subjects = False
+                continue
+            elif line == "Subjects:":
+                reading_subjects = True
+                reading_students = False
+                continue
 
-# Define specialization criteria based on average grade thresholds
+            if reading_students and line:
+                name, age = line.split(", ")
+                students.append(Student(name.strip(), int(age.strip())))
+            elif reading_subjects and line:
+                name, credit = line.split(", ")
+                subjects.append(Subject(name.strip(), int(credit.strip())))
+
+    return students, subjects
+
+
+# Function to save students' results to a file
+def save_results_to_file(filename, students):
+    with open(filename, 'w') as file:
+        for student in students:
+            file.write(str(student) + "\n")
+            file.write("-" * 50 + "\n")
+
+
+# Load data from input file
+students, subjects = load_data_from_file("students_data.txt")
+
+# Define years and specialization criteria
+years = [Year(2023), Year(2024), Year(2025)]
 specialization_criteria = [
     (9.0, "Computer Science"),
     (7.5, "Data Science"),
@@ -127,15 +118,17 @@ specialization_criteria = [
 # Assign subjects and random marks to each student
 for student in students:
     for subject, year in zip(subjects, years):
-        # Random marks between 1 and 10 for the subject
         marks = [random.randint(1, 10) for _ in range(5)]
         student.add_subject(subject, year, marks)
 
     # Calculate and assign specialization based on the student's average grade
-    average_grade = round(student.calculate_overall_average(), 1)
+    average_grade = student.calculate_overall_average()
     student.assign_specialization(average_grade, specialization_criteria)
 
-# Print each student's information including their specialization
+# Save results to output file
+save_results_to_file("student_results.txt", students)
+
+# Print to console
 for student in students:
     print(student)
     print("\n" + "-" * 50 + "\n")
